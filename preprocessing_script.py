@@ -149,4 +149,4 @@ new_df = pd.DataFrame({
     'original_content': data,
     'preprocessed_content': prep
 })
-new_df.to_csv('preprocessed_copyrights.csv')
+new_df.to_csv('data/preprocessed_copyrights.csv')
