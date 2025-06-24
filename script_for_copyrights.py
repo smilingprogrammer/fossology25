@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
+from dotenv import load_dotenv
 import psycopg2
 import pandas as pd
+from datetime import datetime
+
+load_dotenv()
 
 sql = """
         SELECT DISTINCT ON (C.copyright_pk, UT.uploadtree_pk)
@@ -26,11 +31,11 @@ sql = """
 def fetch_copyright_data():
     try:
         connection = psycopg2.connect(
-            dbname="fossology",
-            user="fossy",
-            password="fossy",
-            host="localhost",
-            port="5432"
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            host=os.getenv("DB_HOST"),
+            port=os.getenv("DB_PORT")
         )
         cursor =  connection.cursor()
 
@@ -38,6 +43,7 @@ def fetch_copyright_data():
 
 
         records = cursor.fetchall()
+        timestamp = datetime.now().isoformat()
         # print(records)
         results = []
         for record in records:
@@ -45,7 +51,8 @@ def fetch_copyright_data():
                 "original_content": record[2],
                 "original_is_enabled": record[7],
                 "edited_content": record[3],
-                "modified_is_enabled": record[8]
+                "modified_is_enabled": record[8],
+                "fetched_at": timestamp
             }
             results.append(result)
         df = pd.DataFrame(results)
