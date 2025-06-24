@@ -1,0 +1,31 @@
+name: Test Preprocessing Script
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-preprocessing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run preprocessing script
+        run: |
+          python preprocessing_script.py
+
+      - name: Upload cleaned output
+        uses: actions/upload-artifact@v3
+        with:
+          name: cleaned-data
+          path: cleaned_output.csv
