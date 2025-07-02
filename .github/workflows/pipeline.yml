@@ -41,3 +41,13 @@ jobs:
           path: |
             data/train_data.csv
             data/test_data.csv
+
+      - name: Declutter content
+        run: |
+          python declutter_script.py
+
+      - name: Upload Decluttered Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: decluttered-data
+          path: data/decluttered_copyrights.csv
